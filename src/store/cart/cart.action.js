@@ -41,7 +41,6 @@ const removeCartItem = (cartItems, cartItemRemove) => {
   return cartItems.filter((cartItem) => cartItem.id !== cartItemRemove.id);
 };
 
-
 export const setIsCartOpen = (bool) => createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, bool);
 
 // Action creators. exposed to components. Uses locally defined funcs that return an updated cart items array. all of these set the cart items but modify the data differently depending on HOW we want it modified
