@@ -17,7 +17,9 @@ import {
   signOutUser
 } from '../../assets/utils/firebase/firebase.utils';
 
+/* ------------- WORKER SAGAS ------------ */
 
+// gets user data from Firebase - Called w/in all sign-in sagas
 export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
   try {
     const userSnapshot = yield call(
@@ -30,31 +32,15 @@ export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
     yield put(signInFailed(error));
   }
 }
-
-export function* signOut() {
+// triggered by useEffect when app loads. Checks if a user is still signed in to Firebase 
+export function* isUserAuthenticated() {
   try {
-    yield call(signOutUser);
-    yield put(signOutSuccess())
+    const userAuth = yield call(getCurrentUser);
+    if (!userAuth) return;
+    yield call(getSnapshotFromUserAuth, userAuth);
   } catch (error) {
-    yield put(signOutFailed(error))
+    yield put(signInFailed(error));
   }
-}
-
-export function* signUp({ payload: { email, password, displayName } }) {
-  try {
-    const { user } = yield call(
-      createAuthUserWithEmailAndPassword,
-      email,
-      password
-    ); //returns an Auth obj with a user property that has the data we want
-    yield put(signUpSuccess(user, { displayName }));
-  } catch (error) {
-    yield put(signUpFailed(error));
-  }
-}
-
-export function* signInAfterSignUp({ payload: { user, additionalDetails } }) {
-  yield call(getSnapshotFromUserAuth, user, additionalDetails);
 }
 
 export function* signInWithEmail({ payload: { email, password } }) {
@@ -79,26 +65,36 @@ export function* signInWithGoogle() {
   }
 }
 
-export function* isUserAuthenticated() {
+export function* signUp({ payload: { email, password, displayName } }) {
   try {
-    const userAuth = yield call(getCurrentUser);
-    if (!userAuth) return;
-    yield call(getSnapshotFromUserAuth, userAuth);
+    const { user } = yield call(
+      createAuthUserWithEmailAndPassword,
+      email,
+      password
+    ); //returns an Auth obj with a user property that has the data we want
+    yield put(signUpSuccess(user, { displayName }));
   } catch (error) {
-    yield put(signInFailed(error));
+    yield put(signUpFailed(error));
   }
 }
 
-export function* onSignOutStart() {
-  yield takeLatest(USER_ACTION_TYPES.SIGN_OUT_START, signOut);
+export function* signInAfterSignUp({ payload: { user, additionalDetails } }) {
+  yield call(getSnapshotFromUserAuth, user, additionalDetails);
 }
 
-export function* onSignUpStart() {
-  yield takeLatest(USER_ACTION_TYPES.SIGN_UP_START, signUp);
+export function* signOut() {
+  try {
+    yield call(signOutUser);
+    yield put(signOutSuccess())
+  } catch (error) {
+    yield put(signOutFailed(error))
+  }
 }
 
-export function* onSignUpSuccess() {
-  yield takeLatest(USER_ACTION_TYPES.SIGN_UP_SUCCESS, signInAfterSignUp);
+/* ---------- WATCHER SAGAS ---------- */
+
+export function* onCheckUserSession() {
+  yield takeLatest(USER_ACTION_TYPES.CHECK_USER_SESSION, isUserAuthenticated);
 }
 
 export function* onEmailSignInStart() {
@@ -109,9 +105,20 @@ export function* onGoogleSignInStart() {
   yield takeLatest(USER_ACTION_TYPES.GOOGLE_SIGN_IN_START, signInWithGoogle);
 }
 
-export function* onCheckUserSession() {
-  yield takeLatest(USER_ACTION_TYPES.CHECK_USER_SESSION, isUserAuthenticated);
+export function* onSignUpStart() {
+  yield takeLatest(USER_ACTION_TYPES.SIGN_UP_START, signUp);
 }
+
+export function* onSignUpSuccess() {
+  yield takeLatest(USER_ACTION_TYPES.SIGN_UP_SUCCESS, signInAfterSignUp);
+}
+
+export function* onSignOutStart() {
+  yield takeLatest(USER_ACTION_TYPES.SIGN_OUT_START, signOut);
+}
+
+
+/* --------- AGGREGATE USER SAGA --------- */
 
 export function* userSagas() {
   yield all([

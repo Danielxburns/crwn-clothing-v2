@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(checkUserSession())
-  }, [dispatch]); // Redux's 'dispatch' never changes. This listener is just set up upon initialization. We could leave this array empy but the linter doesn't like it.
+  }, [dispatch]); // Redux's 'dispatch' never changes. This listener is just set up upon initialization. We could leave this array empty but the linter doesn't like it.
 
   return (
     <Routes>
