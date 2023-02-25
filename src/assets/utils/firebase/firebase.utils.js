@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   signInWithEmailAndPassword,
-  signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -30,7 +29,6 @@ const firebaseConfig = {
   appId: '1:99560352212:web:3263e9a6f481fd27ddce41',
 };
 
-// Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
 const googleProvider = new GoogleAuthProvider();
@@ -41,8 +39,6 @@ googleProvider.setCustomParameters({
 export const auth = getAuth();
 export const signInWithGooglePopup = () =>
   signInWithPopup(auth, googleProvider);
-export const signInWithGoogleRedirect = () =>
-  signInWithRedirect(auth, googleProvider);
 
 export const db = getFirestore();
 
@@ -76,7 +72,6 @@ export const createUserDocumentFromAuth = async (
   if (!userAuth) return;
   const userDocRef = doc(db, 'users', userAuth.uid);
   const userSnapshot = await getDoc(userDocRef);
-
   if (!userSnapshot.exists()) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
@@ -92,7 +87,7 @@ export const createUserDocumentFromAuth = async (
       console.log('error creating the user', err.message);
     }
   }
-  return userDocRef;
+  return userSnapshot /* userDocRef */;
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
@@ -109,4 +104,19 @@ export const signOutUser = async () => await signOut(auth);
 
 export const onAuthStateChangedListener = async (callback) => {
   return await onAuthStateChanged(auth, callback);
+};
+
+// replaces Firebase listener for use in Promise based Sagas
+// It checks to see if there is an active user that has been authenticated already
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
 };
