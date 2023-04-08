@@ -23,6 +23,7 @@ const App = () => {
       if (user) {
         createUserDocumentFromAuth(user);
       }
+      // console.log('inside /App.js unsubscribe user :>> ', user);
       dispatch(setCurrentUser(user));
     });
     return unsubscribe;
