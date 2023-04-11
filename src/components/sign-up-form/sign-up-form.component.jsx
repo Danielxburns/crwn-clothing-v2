@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { signUpStart } from '../../store/user/user.action';
 
 import FormInput from '../form-input/form-input.component';
-import Button from '../button-component/button.component';
+import Button from '../button/button.component';
 import { SignUpContainer } from './sign-up-form.styles.jsx';
 
 const defaultFormFields = {
@@ -29,7 +29,7 @@ const SignUpForm = () => {
       return;
     }
     try {
-      dispatch(signUpStart(email, password, displayName))
+      dispatch(signUpStart(email, password, displayName));
       resetFormFields();
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
