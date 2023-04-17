@@ -22,13 +22,13 @@ export const selectCategoriesMap = createSelector(
     return categories.reduce((acc, category) => {
       const { title, items } = category;
       acc[title.toLowerCase()] = items;
-      return acc;
+      return acc
     }, {} as CategoryMap);
   }
 );
 
 export const selectCategoriesIsLoading = createSelector(
-  [selectCategories],
+  [selectCategoriesFromState],
   (categoriesSlice) => categoriesSlice.isLoading
 );
 
