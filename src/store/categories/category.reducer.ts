@@ -16,7 +16,7 @@ export const CATEGORIES_INTIAL_STATE: CategoriesState = {
 
 export const categoriesReducer = (
   state = CATEGORIES_INTIAL_STATE,
-  action = {} as AnyAction
+  action: AnyAction
 ): CategoriesState => {
 
   if(fetchCategoriesStart.match(action)) {

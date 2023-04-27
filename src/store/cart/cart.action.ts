@@ -1,9 +1,11 @@
-import { createAction } from "../../assets/utils/reducer/reducer.utils";
-import { CART_ACTION_TYPES } from "./cart.type";
+import { createAction, ActionWIthPayload, withMatcher } from "../../assets/utils/reducer/reducer.utils";
+import { CategoryItem } from "../categories/category.types";
+import { CART_ACTION_TYPES, CartItem } from "./cart.type";
 //import { selectCartItems } from "./cart.selector";
 
 
-const addCartItem = (cartItems, productToAdd) => {
+
+const addCartItem = (cartItems: CartItem[], productToAdd: CategoryItem): CartItem[] => {
   // accepts context array and item to find
   const existingCartItem = cartItems.find(
     (cartItem) => cartItem.id === productToAdd.id // find item by id (will return undefined if not found)
@@ -22,11 +24,11 @@ const addCartItem = (cartItems, productToAdd) => {
   return [...cartItems, { ...productToAdd, quantity: 1 }]; // if item is not in cart, return new array with new item and quantity property
 };
 
-const decrimentCartItemQuantity = (cartItems, productToDecriment) => {
+const decrimentCartItemQuantity = (cartItems: CartItem[], productToDecriment: CartItem): CartItem[] => {
   const existingCartItem = cartItems.find(
     (cartItem) => cartItem.id === productToDecriment.id
   );
-  if (existingCartItem.quantity) {
+  if (existingCartItem && existingCartItem.quantity) {
     return cartItems.map((cartItem) => {
       return cartItem.id === productToDecriment.id
         ? { ...cartItem, quantity: cartItem.quantity - 1 }
@@ -37,27 +39,35 @@ const decrimentCartItemQuantity = (cartItems, productToDecriment) => {
   }
 };
 
-const removeCartItem = (cartItems, cartItemRemove) => {
+const removeCartItem = (cartItems: CartItem[], cartItemRemove: CartItem): CartItem[] => {
   return cartItems.filter((cartItem) => cartItem.id !== cartItemRemove.id);
 };
 
-export const setIsCartOpen = (bool) => createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, bool);
 
 // Action creators. exposed to components. Uses locally defined funcs that return an updated cart items array. all of these set the cart items but modify the data differently depending on HOW we want it modified
-export const addItemToCart = (cartItems, productToAdd) => {
+
+export type SetIsCartOpen = ActionWIthPayload<CART_ACTION_TYPES.SET_IS_CART_OPEN, Boolean>
+
+export type SetCartItems = ActionWIthPayload<CART_ACTION_TYPES.SET_CART_ITEMS, CartItem[]>
+
+export const setCartItems = withMatcher((cartItems: CartItem[]): SetCartItems => createAction(CART_ACTION_TYPES.SET_CART_ITEMS, cartItems))
+
+export const setIsCartOpen = withMatcher((bool: Boolean) : SetIsCartOpen => createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, bool));
+
+export const addItemToCart = (cartItems: CartItem[], productToAdd: CategoryItem):  SetCartItems => {
   const newCartItems = addCartItem(cartItems, productToAdd); // 
-  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
+  return setCartItems(newCartItems)
 };
 
-export const removeItemFromCart = (cartItems, productToRemove) => {
+export const removeItemFromCart = (cartItems: CartItem[], productToRemove: CartItem): SetCartItems => {
   const newCartItems = removeCartItem(cartItems, productToRemove);
-  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
+  return setCartItems(newCartItems)
 };
 
-export const decreaseItemQuantity = (cartItems, productToDecriment) => {
+export const decreaseItemQuantity = (cartItems: CartItem[], productToDecriment: CartItem): SetCartItems => {
   const newCartItems = decrimentCartItemQuantity(
     cartItems,
     productToDecriment
   );
-  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
+  return setCartItems(newCartItems)
 };

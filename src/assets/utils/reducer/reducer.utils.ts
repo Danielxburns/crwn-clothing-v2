@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux';
 
+// a type that accepts an action creator and intersects it with an obj with type prop and a match method
 type Matchable<AC extends () => AnyAction> = AC & {
   type: ReturnType<AC>['type'];
   match(action: AnyAction): action is ReturnType<AC>;
@@ -8,9 +9,11 @@ type Matchable<AC extends () => AnyAction> = AC & {
 export function withMatcher<AC extends () => AnyAction & { type: string }>(
   actionCreator: AC
 ): Matchable<AC>;
+
 export function withMatcher<
   AC extends (...args: any[]) => AnyAction & { type: string }
 >(actionCreator: AC): Matchable<AC>;
+
 export function withMatcher(actionCreator: Function) {
   const type = actionCreator().type;
   return Object.assign(actionCreator, {
