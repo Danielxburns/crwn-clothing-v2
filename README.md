@@ -1,14 +1,14 @@
 # Daniel's notes
 
 ## Devolopment
-```npm i``` install dependencies  
-```netlify login```  To login to Netlify. It may take awhile for it to get going. Give it minute then follow the prompts.  
-```netlify dev``` start development server. Also may take awhile. 
+```npm i```           Install dependencies  
+```netlify login```   To login to Netlify. It may take awhile for it to get going. Give it minute then follow the prompts.  
+```netlify dev```     start development server. Also may take awhile. 
 
 ## Deployment
-Merge your branch with branch "my-main" and netlify with create and deploy a production build 
+  - Merge your branch with branch "my-main" and netlify with create and deploy a production build 
 
-View live site at [https://lambent-lily-676e88.netlify.app/](https://lambent-lily-676e88.netlify.app/)
+  - View live site at [https://lambent-lily-676e88.netlify.app/](https://lambent-lily-676e88.netlify.app/)
 
 
 
