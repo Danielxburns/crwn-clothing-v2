@@ -1,3 +1,20 @@
+# Daniel's notes
+
+## Devolopment
+```npm i``` install dependencies  
+```netlify login```  To login to Netlify. It may take awhile for it to get going. Give it minute then follow the prompts.  
+```netlify dev``` start development server. Also may take awhile. 
+
+## Deployment
+Merge your branch with branch "my-main" and netlify with create and deploy a production build 
+
+View live site at [https://lambent-lily-676e88.netlify.app/](https://lambent-lily-676e88.netlify.app/)
+
+
+
+\* below this line is the README from the forked project
+___
+
 # How to fork and clone
 One quick note about cloning this project. If you wish to make commits and push your own code, you'll need to fork the project first. Forking allows you to have your own copy of this repository by adding a duplicate version in your own profile!
 
