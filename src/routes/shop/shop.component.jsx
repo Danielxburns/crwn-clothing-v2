@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 const Shop = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-      dispatch(fetchCategoriesStart());
+    dispatch(fetchCategoriesStart());
   }, [dispatch]);
 
   return (

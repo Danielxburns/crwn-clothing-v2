@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import ProductCard from '../../components/product-card/product-card.component';
 import Spinner from '../../components/spinner/spinner.component';
 
-import { CategoryContainer, CategoryTitle } from './category.styles.jsx';
+import { CategoryContainer, CategoryTitle } from './category.styles.js';
 import { useSelector } from 'react-redux';
 
 import {
@@ -12,12 +12,15 @@ import {
   selectCategoriesIsLoading,
 } from '../../store/categories/category.selector';
 
+type CategoryRouteParams = {
+  category: string
+}
+
 const Category = () => {
-  const { category } = useParams();
+  const { category } = useParams<keyof CategoryRouteParams>() as CategoryRouteParams;
   const categoriesMap = useSelector(selectCategoriesMap);
   const isLoading = useSelector(selectCategoriesIsLoading);
-  const [products, setProducts] = useState(categoriesMap[category]); // intitialized as {} from CategoriesContext so value of {category:_____} is undefined
-
+  const [products, setProducts] = useState(categoriesMap[category]);
   useEffect(() => {
     setProducts(categoriesMap[category]);
   }, [category, categoriesMap]);
@@ -29,7 +32,7 @@ const Category = () => {
         <Spinner />
       ) : (
         <CategoryContainer>
-          {products && // don't render this until CategoriesContext gets and sets data from FireStore
+          {products && 
             products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
