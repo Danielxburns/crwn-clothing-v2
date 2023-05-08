@@ -14,7 +14,7 @@ import {
   CartDropdownContainer,
   EmptyMessage,
   CartItems,
-} from './cart-dropdown.styles.jsx';
+} from './cart-dropdown.styles';
 
 export const CartDropdown = () => {
   const dispatch = useDispatch();
