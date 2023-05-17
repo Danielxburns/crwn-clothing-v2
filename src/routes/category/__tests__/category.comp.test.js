@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react';
 import Category from '../category.component';
 import { renderWithProviders } from '../../../assets/utils/test/test.utils';
-import { useParams } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
