@@ -5,22 +5,21 @@ import { renderWithProviders } from '../../../assets/utils/test/test.utils';
 import { signOutStart } from '../../../store/user/user.action';
 
 describe('Navigation tests', () => {
-  test('It should dispatch signOutStart action when clicking on the Sign Out link', async () => {
-    const mockDispatch = jest.fn();
-    jest.spyOn(reactRedux, "useDispatch").mockReturnValue(mockDispatch);
-    renderWithProviders(<Navigation />, {
-      preLoadedState: {
-        user: {
-          currentUser: {}
-        }
-      }
-    })
-    const signOutLinkelement = screen.getByText(/sign out/i);
-    expect(signOutLinkelement).toBeInTheDocument();
-    await fireEvent.click(signOutLinkelement);
-    expect(mockDispatch).toHaveBeenCalled();
-    expect(mockDispatch).toHaveBeenCalledWith(signOutStart());
-    mockDispatch.mockClear();
+  test("It should render the logo", () => {
+    renderWithProviders(<Navigation />);
+    const logoElement = screen.getByTestId('logo');
+    expect(logoElement).toBeInTheDocument();
+  })
+
+  test("It should render the Shop link", () => {
+    renderWithProviders(<Navigation />);
+    expect(screen.getByTestId('shop-link')).toBeInTheDocument()
+  })
+
+  test("It should render the Cart Icon", () => {
+    renderWithProviders(<Navigation />);
+    const cartIconElement = screen.getByTestId('cart-icon');
+    expect(cartIconElement).toBeInTheDocument();
   })
 
   test('It should render a Sign In link and not a Sign Out link if there is no current user', () => {
@@ -37,6 +36,7 @@ describe('Navigation tests', () => {
     const signInLinkElement = screen.getByText(/sign in/i);
     expect(signInLinkElement).toBeInTheDocument();
   });
+
   test('it should render Sign Out and not Sign In if there is a current user', () => {
     renderWithProviders(<Navigation></Navigation>, {
       preLoadedState: {
@@ -77,4 +77,22 @@ describe('Navigation tests', () => {
     const cartDropdownTextElement = screen.getByText(/your cart is empty/i);
     expect(cartDropdownTextElement).toBeInTheDocument();
   });
+
+  test('It should dispatch signOutStart action when clicking on the Sign Out link', async () => {
+    const mockDispatch = jest.fn();
+    jest.spyOn(reactRedux, "useDispatch").mockReturnValue(mockDispatch);
+    renderWithProviders(<Navigation />, {
+      preLoadedState: {
+        user: {
+          currentUser: {}
+        }
+      }
+    })
+    const signOutLinkelement = screen.getByText(/sign out/i);
+    expect(signOutLinkelement).toBeInTheDocument();
+    await fireEvent.click(signOutLinkelement);
+    expect(mockDispatch).toHaveBeenCalled();
+    expect(mockDispatch).toHaveBeenCalledWith(signOutStart());
+    mockDispatch.mockClear();
+  })
 });
