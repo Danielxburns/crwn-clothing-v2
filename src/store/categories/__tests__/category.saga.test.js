@@ -17,6 +17,7 @@ import { CATEGORIES_ACTION_TYPES } from '../category.types';
 // it tests if every step of the saga that's supposed to happen happens
 // this is ok for sagas that only do one thing. 
 // ones that don't issue out any sagas nor are there any steps that get them to that place
+// good for watcher sagas, aggregate sagas, and worker sagas with only one code block
 
 describe('category Sagas', () => {
   test('categoriesSaga', () => {
@@ -37,6 +38,7 @@ describe('category Sagas', () => {
   // 'expectSaga' returns a promise
   // It doesn't care about the order in which the steps happen.
   // It tests the end results of each possible path
+  // good for worker sagas with multiple code blocks
 
   test("fetchCategoriesAsync success", () => {
     const mockCategoriesArray = [
