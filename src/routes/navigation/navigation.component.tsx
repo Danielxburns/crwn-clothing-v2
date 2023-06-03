@@ -32,10 +32,10 @@ const Navigation = () => {
     <Fragment>
       <NavigationContainer>
         <LogoContainer to="/">
-          <CRWNLogo className="logo" />
+          <CRWNLogo className="logo" alt="logo" data-testid="logo"/>
         </LogoContainer>
         <NavLinks>
-          <NavLink to="/shop">SHOP</NavLink>
+          <NavLink to="/shop" data-testid='shop-link'>SHOP</NavLink>
           {currentUser ? (
             <NavLink as="span" onClick={signOutUser}>
               SIGN OUT
