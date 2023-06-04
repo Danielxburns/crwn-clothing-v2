@@ -11,8 +11,6 @@ import { store, persistor } from './store/store';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
-import './index.scss';
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
